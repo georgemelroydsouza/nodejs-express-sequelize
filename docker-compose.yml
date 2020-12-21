@@ -1,0 +1,33 @@
+version: "3.2"
+services:
+     
+  mysql:
+    container_name: demo-mysql
+    image: mysql:5.7
+    build:
+      context: ./mysql/
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./db_data/:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=CHANGE_PASS
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=george
+      - MYSQL_PASSWORD=test123
+    ports:
+      - "3306:3306"
+      
+  nodeweb:
+    container_name: demo-node
+    build: ./app/
+    volumes:
+      - ./app/:/usr/src/api
+      - /usr/src/api/node_modules
+    ports:
+      - 3000:3000
+    links:
+      - mysql:mysql
+    environment:
+      WAIT_HOSTS: "mysql:3306"
+      PORT: 3000
