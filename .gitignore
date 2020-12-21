@@ -106,3 +106,5 @@ dist
 /app/node_modules
 /app/.DS_Store
 /app/.env
+
+db_data/
